@@ -56,22 +56,15 @@ def date_dict():
     last 12 months of data) to a dictionary using date as the key and prcp as the value. 
     Return the JSON representation of your dictionary."""
     # Design a query to retrieve the last 12 months of precipitation data and plot the results. 
-    # Starting from the most recent data point in the database. 
-    recent_date = session.query(Measurement.date).\
-                order_by(Measurement.date.desc()).first()[0]
-    recent_date
-
-    #HOW TO CONVERT STRING TO DATE TIME AND PLUG INTO RECENT YEAR?????
-    dt_recent_date = func.dt(recent_date)
-    dt_recent_date
-
+    
     # Calculate the date one year from the last date in data set.
+        #Don’t pass the date as a variable to your query. ???
+    
+
     recent_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
     recent_year
 
     # Perform a query to retrieve the data and precipitation scores
-
-    #Don’t pass the date as a variable to your query. ???
 
     prep_scores = session.query(Measurement.date, Measurement.prcp).\
                         filter(Measurement.date > recent_year).all()
@@ -121,14 +114,15 @@ def active_station():
 @app.route("/api/v1.0/<start>")
 def user_start(start):
 
-"""Return a JSON list of the minimum temperature, the average temperature, and the maximum temperature for a specified start or start-end range.
+    """Return a JSON list of the minimum temperature, the average temperature, and the maximum temperature for a specified start or start 
+    end range.
 
-For a specified start, calculate TMIN, TAVG, and TMAX for all the dates greater than or equal to the start date."""
+    For a specified start, calculate TMIN, TAVG, and TMAX for all the dates greater than or equal to the start date."""
     low_temp = func.min(Measurement.tobs)
     high_temp = func.max(Measurement.tobs)
     avg_temp = func.avg(Measurement.tobs)
     sel = [low_temp, high_temp, avg_temp]
-    user_start = dt.date(2016, 8, 23)
+    user_start = start
     user_query = session.query(*sel).\
                         filter(Measurement.date >= user_start).all()
 
@@ -136,7 +130,7 @@ For a specified start, calculate TMIN, TAVG, and TMAX for all the dates greater 
     user_high = user_query[0][1]
     user_avg = user_query[0][2]
 
-return (
+    return (
     f'Minimum Temperature: {user_low}'
     f'Average Temperature: {user_avg}'
     f'Maximum Temperature: {user_high}'
@@ -144,25 +138,28 @@ return (
 )
 
 
-#@app.route("/api/v1.0/<start>/<end>")
-"""Return a JSON list of the minimum temperature, the average temperature, and the maximum temperature for a specified start or start-end range.
-
-For a specified start date and end date, calculate TMIN, TAVG, and TMAX for the dates from the start date to the end date, inclusive."""
+@app.route("/api/v1.0/<start>/<end>")
 def user_start_end(start, end):
+    """Return a JSON list of the minimum temperature, the average temperature, and the maximum temperature for a specified start or start-
+    end range.
+
+    For a specified start date and end date, calculate TMIN, TAVG, and TMAX for the dates from the start date to the end date, 
+    inclusive."""    
     low_temp = func.min(Measurement.tobs)
     high_temp = func.max(Measurement.tobs)
     avg_temp = func.avg(Measurement.tobs)
     sel = [low_temp, high_temp, avg_temp]
-    user_start = dt.date(2016, 8, 23)
+    user_start = start
+    user_finish = end
     user_query = session.query(*sel).\
-                        filter(Measurement.date <= user_start).\
-                        filter(Measurement.date >= user_start).all()
+                        filter(Measurement.date >= user_start).\
+                        filter(Measurement.date <= user_finish).all()
 
     user_low = user_query[0][0]
     user_high = user_query[0][1]
     user_avg = user_query[0][2]
 
-return (
+    return (
     f'Minimum Temperature: {user_low}'
     f'Average Temperature: {user_avg}'
     f'Maximum Temperature: {user_high}'
