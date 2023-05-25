@@ -1,1 +1,11 @@
 # sqlalchemy-challenge
+
+# To help with planning my trip to Honolulu, Hawaii, I performed a climate analysis about the area, and I created an app to use the queries I developed. For my analysis' and app, I relfected into the hawaii.sqlite database located in the Resources folder. I saved the classes, measurement and station, as tables. Then, I created a session from python to the database. 
+# For my precipitation analysis, I found the most recent date, 2017-08-23. I queried the previous 12 months of measurement dates and precipitation scores, and I saved the data into a dataframe sorted by date.  I plotted the results, Measurement Dates vs Precipitation Score, and outputted the summary statistics. 
+# For my station analysis, I designed a query to calculate the total number of stations in the dataset. I designed a query to find the most-active stations. I designed a query to calculate the lowest, highest and average temperatures by filtering for the most active-station id. I designed a query to get the previous 12 months of temperature observations (TOBS), and I plotted the results in a histogram.
+# For my climate app, i created a homepage (/) to list available routes. The available routes were 
+    - (/api/v1.0/precipitation) which converted the query results from my precipitation analysis to a dictionary using date as the key and prcp as the value and returned the results as a JSON format
+    - (/api/v1.0/stations) which returned the list of the stations from the dataset in JSON format
+    - (/api/v1.0/tobs) which queried the date and temperature observations of the most-active station for the previous year and returned the results as a JSON format
+    - (/api/v1.0/<start>) which returned a JSON list of the minimum temperature, the average temperature, and the maximum temperature for a specified start
+    - (/api/v1.0/<start>/<end>) which returned a JSON list of the minimum temperature, the average temperature, and the maximum temperature for a specified start and end date
